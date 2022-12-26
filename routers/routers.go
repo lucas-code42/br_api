@@ -23,3 +23,13 @@ var UrlCurrency = Currency{
 	UrlEurToBrl: "https://brapi.dev/api/v2/currency?currency=EUR-BRL",
 	Method:      "GET",
 }
+
+type QuoteList struct {
+	Url    string
+	Method string
+}
+
+var UrlQuoteList = QuoteList{
+	Url:    "https://brapi.dev/api/quote/list?sortOrder=desc&limit=1557",
+	Method: "GET",
+}

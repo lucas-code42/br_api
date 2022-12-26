@@ -87,3 +87,39 @@ func GetCurrency() {
 	fmt.Printf("Cotação %s\nPreço R$ %.2f\n", reponseObj.Name, price)
 
 }
+
+// GetCheaperStocks busca as 100 ações mais baratas e retorna
+func GetCheaperStocks() {
+	client := &http.Client{}
+
+	req, err := http.NewRequest(
+		routers.UrlQuoteList.Method,
+		routers.UrlQuoteList.Url,
+		nil,
+	)
+	if err != nil {
+		log.Fatal("Erro (GetCheaperStocks) ao instanciar nova requisição -> ", err)
+	}
+
+	req.Header.Add("content-type", "application/json")
+
+	res, err := client.Do(req)
+	if err != nil {
+		log.Fatal("Erro (GetCheaperStocks) ao executar a requisição ->", err)
+	}
+	defer res.Body.Close()
+
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		log.Fatal("Erro (GetCheaperStocks) ao parsear res.body para bytes ->", err)
+	}
+
+	var bodyJSON models.QuoteList
+	if err = json.Unmarshal(body, &bodyJSON); err != nil {
+		log.Fatal("Erro (GetCheaperStocks) ao parsear body para models.QuoteList ->", err)
+	}
+
+	for _, v := range bodyJSON.Stocks {
+		fmt.Println(v)
+	}
+}

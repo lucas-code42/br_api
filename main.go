@@ -22,7 +22,8 @@ func main() {
 		api.GetAllAvailable()
 	case "2":
 		api.GetCurrency()
-		// fmt.Println(result)
+	case "3":
+		api.GetCheaperStocks()
 	default:
 		fmt.Println("Nenhuma foi opção digitada, encerrando...")
 	}
