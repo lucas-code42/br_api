@@ -119,7 +119,17 @@ func GetCheaperStocks() {
 		log.Fatal("Erro (GetCheaperStocks) ao parsear body para models.QuoteList ->", err)
 	}
 
-	for _, v := range bodyJSON.Stocks {
-		fmt.Println(v)
+	// TODO -> CRIAR ALGORITIMO DE ORDENAÇÃO
+	var aux [2]interface{}
+	for i, v := range bodyJSON.Stocks {
+		if i == 1 {
+			aux[0] = v
+		}
+		if i == 0 {
+			aux[1] = v
+		}
+		fmt.Println("Posição na lista", i, v.Close, v.Name)
 	}
+	fmt.Println(aux[:]...)
+
 }
