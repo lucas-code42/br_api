@@ -30,6 +30,6 @@ type QuoteList struct {
 }
 
 var UrlQuoteList = QuoteList{
-	Url:    "https://brapi.dev/api/quote/list?sortOrder=desc&limit=2", // MAX = 1557
+	Url:    "https://brapi.dev/api/quote/list?sortOrder=desc&limit=1557", // MAX = 1557
 	Method: "GET",
 }

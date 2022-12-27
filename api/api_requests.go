@@ -119,17 +119,29 @@ func GetCheaperStocks() {
 		log.Fatal("Erro (GetCheaperStocks) ao parsear body para models.QuoteList ->", err)
 	}
 
-	// TODO -> CRIAR ALGORITIMO DE ORDENAÇÃO
-	var aux [2]interface{}
-	for i, v := range bodyJSON.Stocks {
-		if i == 1 {
-			aux[0] = v
-		}
-		if i == 0 {
-			aux[1] = v
-		}
-		fmt.Println("Posição na lista", i, v.Close, v.Name)
-	}
-	fmt.Println(aux[:]...)
+	stocks := sortStocks(bodyJSON.Stocks)
+	fmt.Println(stocks)
+}
 
+// SortStocks ordena as stocks do menor para o maior
+func sortStocks(data []models.QuoteListData) []models.QuoteListData {
+	for j := 0; j < len(data); j++ {
+		for i := 0; i < len(data); i++ {
+			var temp models.QuoteListData
+			currentPosition := i
+			nextPostion := i + 1
+
+			if nextPostion == len(data) {
+				break
+			}
+
+			if data[currentPosition].Close > data[nextPostion].Close {
+				temp = data[currentPosition]
+				data[currentPosition] = data[nextPostion]
+				data[nextPostion] = temp
+			}
+		}
+
+	}
+	return data
 }

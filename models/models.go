@@ -25,9 +25,9 @@ type currencyData struct {
 
 // QuoteList modela o retorno do endpoint -> https://brapi.dev/api/quote/list?sortOrder=desc&limit=1557
 type QuoteList struct {
-	Stocks []quoteListData `json:"stocks"`
+	Stocks []QuoteListData `json:"stocks"`
 }
-type quoteListData struct {
+type QuoteListData struct {
 	Stock      string  `json:"stock"`
 	Name       string  `json:"name"`
 	Close      float64 `json:"close"`
