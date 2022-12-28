@@ -119,12 +119,78 @@ func GetCheaperStocks() {
 		log.Fatal("Erro (GetCheaperStocks) ao parsear body para models.QuoteList ->", err)
 	}
 
+	fmt.Println(len(bodyJSON.Stocks))
+
 	stocks := sortStocks(bodyJSON.Stocks)
-	fmt.Println(stocks)
+	fmt.Println(len(stocks))
+
+	for _, v := range stocks {
+		fmt.Println(v.Stock, v.Close)
+	}
 }
 
 // SortStocks ordena as stocks do menor para o maior
 func sortStocks(data []models.QuoteListData) []models.QuoteListData {
+	cut := len(data) / 10
+	data, s1 := divideList(data, cut)
+
+	cut = len(data) / 8
+	data, s2 := divideList(data, cut)
+
+	cut = len(data) / 6
+	data, s3 := divideList(data, cut)
+
+	cut = len(data) / 4
+	data, s4 := divideList(data, cut)
+
+	c := make(chan []models.QuoteListData)
+	go sortListChan(s1, c)
+	go sortListChan(s2, c)
+	go sortListChan(s3, c)
+	go sortListChan(s4, c)
+
+	sorted1 := <-c
+	sorted2 := <-c
+	sorted3 := <-c
+	sorted4 := <-c
+
+	var finalList []models.QuoteListData
+	finalList = append(finalList, sorted1...)
+	finalList = append(finalList, sorted2...)
+	finalList = append(finalList, sorted3...)
+	finalList = append(finalList, sorted4...)
+	finalList = append(finalList, data...)
+
+	finalList = sortList(finalList)
+
+	return finalList
+}
+
+// sortListChan ordena uma lista e devolve a informação no canal
+func sortListChan(data []models.QuoteListData, c chan []models.QuoteListData) {
+	for j := 0; j < len(data); j++ {
+		for i := 0; i < len(data); i++ {
+			var temp models.QuoteListData
+			currentPosition := i
+			nextPostion := i + 1
+
+			if nextPostion == len(data) {
+				break
+			}
+
+			if data[currentPosition].Close > data[nextPostion].Close {
+				temp = data[currentPosition]
+				data[currentPosition] = data[nextPostion]
+				data[nextPostion] = temp
+			}
+		}
+
+	}
+	c <- data
+}
+
+// sortList Ordena a lista e retorna
+func sortList(data []models.QuoteListData) []models.QuoteListData {
 	for j := 0; j < len(data); j++ {
 		for i := 0; i < len(data); i++ {
 			var temp models.QuoteListData
@@ -144,4 +210,11 @@ func sortStocks(data []models.QuoteListData) []models.QuoteListData {
 
 	}
 	return data
+}
+
+// divideList divide a lista e retorna o recorte mais a sobra da lista.
+func divideList(list []models.QuoteListData, cut int) (tmp, slice []models.QuoteListData) {
+	tmp = list[cut:]
+	slice = list[:cut]
+	return tmp, slice
 }
