@@ -24,6 +24,8 @@ func main() {
 		api.GetCurrency()
 	case "3":
 		api.GetCheaperStocks()
+	case "4":
+		api.SortStocksBySector()
 	default:
 		fmt.Println("Nenhuma foi opção digitada, encerrando...")
 	}

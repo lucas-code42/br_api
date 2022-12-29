@@ -13,4 +13,5 @@ func ShowMenu() {
 	fmt.Println("1 - Mostrar todas as ações disponiveis")
 	fmt.Println("2 - Cotação dólar x real.")
 	fmt.Println("3 - TOP 100 ações mais baratas")
+	fmt.Println("4 - Ordenar por setor")
 }
