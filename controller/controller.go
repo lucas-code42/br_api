@@ -1,6 +1,8 @@
 package controller
 
-import "br_api/models"
+import (
+	"br_api/models"
+)
 
 // SortStocks ordena as stocks do menor para o maior
 func SortStocks(data []models.QuoteListData) []models.QuoteListData {
@@ -106,5 +108,32 @@ func CreateGroupBySector(data []models.QuoteListData) map[string][]models.QuoteL
 			newMap[v.Sector] = append(newMap[v.Sector], v)
 		}
 	}
+
+	newMap = SortStockInSectors(newMap)
 	return newMap
+}
+
+// SortStockInSectors ordena as ações da menor para maior dentro do map separado por setores
+func SortStockInSectors(data map[string][]models.QuoteListData) map[string][]models.QuoteListData {
+	for _, array := range data {
+		for j := 0; j < len(array); j++ {
+			for i := 0; i < len(array); i++ {
+				var temp models.QuoteListData
+				currentPosition := i
+				nextPostion := i + 1
+
+				if nextPostion == len(array) {
+					break
+				}
+
+				if array[currentPosition].Close > array[nextPostion].Close {
+					temp = array[currentPosition]
+					array[currentPosition] = array[nextPostion]
+					array[nextPostion] = temp
+				}
+			}
+
+		}
+	}
+	return data
 }

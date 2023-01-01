@@ -168,13 +168,11 @@ func SortStocksBySector() {
 	// }
 
 	teste := controller.CreateGroupBySector(bodyJSON.Stocks)
-	c := 0
 	for k, v := range teste {
-		for _, i := range v {
-			fmt.Println(k, i)
-			c++
+		for _, j := range v {
+			fmt.Println(k, j.Stock, j.Close)
 		}
+		fmt.Println()
 	}
-	fmt.Println(len(bodyJSON.Stocks))
-	fmt.Println(c)
+
 }
