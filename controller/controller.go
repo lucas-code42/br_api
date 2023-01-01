@@ -91,3 +91,20 @@ func DivideList(list []models.QuoteListData, cut int) (tmp, slice []models.Quote
 	slice = list[:cut]
 	return tmp, slice
 }
+
+// CreateGroupBySector mapeia cada setor com um array de objts
+func CreateGroupBySector(data []models.QuoteListData) map[string][]models.QuoteListData {
+	newMap := make(map[string][]models.QuoteListData)
+
+	for _, v := range data {
+		var listTemp []models.QuoteListData
+		_, ok := newMap[v.Sector]
+		if !ok {
+			listTemp = append(listTemp, v)
+			newMap[v.Sector] = listTemp
+		} else {
+			newMap[v.Sector] = append(newMap[v.Sector], v)
+		}
+	}
+	return newMap
+}

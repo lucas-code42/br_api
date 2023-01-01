@@ -130,6 +130,7 @@ func GetCheaperStocks() {
 	}
 }
 
+// SortStocksBySector ordena as ações por setor
 func SortStocksBySector() {
 	client := &http.Client{}
 
@@ -160,7 +161,20 @@ func SortStocksBySector() {
 		log.Fatal("Erro (SortStocksBySector) ao parsear body para models.QuoteList ->", err)
 	}
 
-	for _, v := range bodyJSON.Stocks {
-		fmt.Println(v.Sector)
+	// for _, v := range bodyJSON.Stocks {
+	// 	fmt.Println()
+	// 	fmt.Println(v)
+	// 	fmt.Println()
+	// }
+
+	teste := controller.CreateGroupBySector(bodyJSON.Stocks)
+	c := 0
+	for k, v := range teste {
+		for _, i := range v {
+			fmt.Println(k, i)
+			c++
+		}
 	}
+	fmt.Println(len(bodyJSON.Stocks))
+	fmt.Println(c)
 }
