@@ -161,16 +161,10 @@ func SortStocksBySector() {
 		log.Fatal("Erro (SortStocksBySector) ao parsear body para models.QuoteList ->", err)
 	}
 
-	// for _, v := range bodyJSON.Stocks {
-	// 	fmt.Println()
-	// 	fmt.Println(v)
-	// 	fmt.Println()
-	// }
-
 	teste := controller.CreateGroupBySector(bodyJSON.Stocks)
 	for k, v := range teste {
 		for _, j := range v {
-			fmt.Println(k, j.Stock, j.Close)
+			fmt.Println(k, j)
 		}
 		fmt.Println()
 	}

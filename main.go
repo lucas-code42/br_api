@@ -30,5 +30,4 @@ func main() {
 		fmt.Println("Nenhuma foi opção digitada, encerrando...")
 	}
 	os.Exit(0)
-
 }
