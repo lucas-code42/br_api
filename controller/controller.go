@@ -2,6 +2,10 @@ package controller
 
 import (
 	"br_api/models"
+	"fmt"
+	"strconv"
+
+	"github.com/xuri/excelize/v2"
 )
 
 // SortStocks ordena as stocks do menor para o maior
@@ -110,6 +114,7 @@ func CreateGroupBySector(data []models.QuoteListData) map[string][]models.QuoteL
 	}
 
 	newMap = SortStockInSectors(newMap)
+	writeXlsx(newMap)
 	return newMap
 }
 
@@ -136,4 +141,43 @@ func SortStockInSectors(data map[string][]models.QuoteListData) map[string][]mod
 		}
 	}
 	return data
+}
+
+// writeXlsx escreve dados em um arquivo xlsx, retorna true caso operação de certo
+func writeXlsx(data map[string][]models.QuoteListData) bool {
+	f := excelize.NewFile()
+	defer func() {
+		if err := f.Close(); err != nil {
+			fmt.Println("Erro ao fechar excelize", err)
+		}
+	}()
+
+	var dataToWrite []models.QuoteListData
+	for _, arr := range data {
+		dataToWrite = append(dataToWrite, arr...)
+	}
+
+	for i := 0; i < len(dataToWrite); i++ {
+		A_cellIndex := fmt.Sprintf("A%s", strconv.FormatInt(int64(i+1), 10))
+		B_cellIndex := fmt.Sprintf("B%s", strconv.FormatInt(int64(i+1), 10))
+		C_cellIndex := fmt.Sprintf("C%s", strconv.FormatInt(int64(i+1), 10))
+		D_cellIndex := fmt.Sprintf("D%s", strconv.FormatInt(int64(i+1), 10))
+		
+		// fmt.Println(A_cellIndex)
+		// fmt.Println(B_cellIndex)
+		// fmt.Println(C_cellIndex)
+
+		f.SetCellValue("Sheet1", A_cellIndex, dataToWrite[i].Sector)
+		f.SetCellValue("Sheet1", B_cellIndex, dataToWrite[i].Stock)
+		f.SetCellValue("Sheet1", C_cellIndex, dataToWrite[i].Name)
+		f.SetCellValue("Sheet1", D_cellIndex, dataToWrite[i].Close)
+	}
+
+	// Save spreadsheet by the given path.
+	if err := f.SaveAs("Book1.xlsx"); err != nil {
+		fmt.Println("Erro ao salvar arquivo", err)
+		return false
+	}
+
+	return true
 }
