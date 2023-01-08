@@ -3,11 +3,18 @@ package main
 import (
 	"br_api/api"
 	"br_api/cli"
+	"br_api/routers"
 	"fmt"
+	"log"
+	"net/http"
 	"os"
 )
 
 func main() {
+
+	routers.StartRouters()
+
+
 	cli.Greet()
 	cli.ShowMenu()
 	fmt.Print("Escolha uma opção do menu:")

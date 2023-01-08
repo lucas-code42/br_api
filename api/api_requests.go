@@ -13,7 +13,7 @@ import (
 )
 
 // GetAllAvailable chama a rota https://brapi.dev/api/available e retorna
-func GetAllAvailable() {
+func GetAllAvailable(w http.ResponseWriter, r *http.Request) {
 	client := &http.Client{}
 	req, err := http.NewRequest(
 		routers.UrlAvailable.Method,
